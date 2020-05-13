@@ -1,0 +1,18 @@
+PS> $net = New-Object -ComObject WScript.Network
+PS> $net.MapNetworkDrive("E:", "\\SRV01\users")
+
+
+import wmi
+c = wmi.WMI()
+result, = c.Win32_Share.Create(Path="c:\\temp", Name="temp", Type=0)
+if result == 0:
+    print "Share created successfully"
+else:
+    raise RuntimeError, "Problem creating share: %d" % result
+
+
+$session=New-PSSession -ComputerName LH25CU143
+New-SmbShare -Name Spring -Path C:\Spring `
+  -CimSession $session -FullAccess "OMEGA\admins" `
+  -ChangeAccess Everyone `
+  -Description "Shared Folder for Spring Students"

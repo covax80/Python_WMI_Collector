@@ -1,0 +1,2 @@
+wmic path win32_NTLogEvent WHERE "Logfile='Application' AND (SourceName='Chkdsk' OR SourceName='
+Wininit' or SourceName='WinLogon') AND (EventCode=1001 OR EventCode=26214)" get /value > "$env:homepath\desktop\chkdsk_history.txt"

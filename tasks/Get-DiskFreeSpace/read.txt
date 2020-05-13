@@ -1,0 +1,4 @@
+for disk in vodev1.Win32_LogicalDisk ():
+  if disk.DriveType == 3:
+    space = 100 * long (disk.FreeSpace) / long (disk.Size)
+    print "%s has %d%% free" % (disk.Name, space)

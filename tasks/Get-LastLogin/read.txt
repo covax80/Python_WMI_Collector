@@ -1,0 +1,9 @@
+    wmiObject = wmi.WMI(privileges=["Security"])
+    try:
+        lastLoginLog = wmiObject.Win32_NTLogEvent(["InsertionStrings","TimeGenerated"],EventCode=680)[0]    # For Win XP et 2k, EventCode = 680, but with Vista EventCode = 4624
+        lastLogin = [lastLoginLog.InsertionStrings[1],lastLoginLog.TimeGenerated]
+        # convert the date
+        lastLogin[1] = windowsDateConversion(lastLogin[1])
+        result['lastLogin']=lastLogin
+    except (WindowsError, wmi.x_wmi, IndexError): # pyflakes.ignore
+        result['lastLogin']=["N/A","N/A"]

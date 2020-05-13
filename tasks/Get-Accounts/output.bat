@@ -1,0 +1,1 @@
+WMIC USERACCOUNT LIST BRIEF > C:\Users\Public\output.out

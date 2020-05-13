@@ -1,0 +1,43 @@
+#!python3
+
+#from win32com.client.dynamic import AttributeError
+
+def split_strip(comma_separated_txt="", delimiter=","):
+	return [x.strip() for x in comma_separated_txt.split(delimiter)]
+
+
+def plain_text3(wmi_objects,command_line_arg,host):
+	if type(wmi_objects) is not list:
+		wmi_objects = [wmi_objects]
+	silently=False
+	if not '2' in command_line_arg.save_mode:
+		silently=True
+	properties = command_line_arg.wmi_object_properties
+	if properties:
+		properties = split_strip(command_line_arg.wmi_object_properties)
+	
+	"""if attributes == None then print ALL attributes"""
+	final_properties = None
+	result=[]
+	
+
+	for obj in wmi_objects:
+
+		#if not silently:
+		#	result.append([obj.Name,""])
+
+		if properties:
+			final_properties = properties
+		else: 
+			final_properties = obj.properties.keys()
+
+		for Property in final_properties:
+#			try:
+				if not silently:
+			        	result.append([Property, getattr(obj, Property)])
+				else:
+			        	result.append([getattr(obj, Property),""])			
+#			except(AttributeError):
+#				result.append([obj.Property, getattr(obj, obj.Property)])
+
+	return result

@@ -1,0 +1,14 @@
+"""c = wmi.WMI("VOSTOK-WS070",user="DOMAIN\\USER",password="")
+for user in c.Win32_Account(["Caption", "Description","SID"]):
+	sid = user.SID.split("-")
+	if len(sid) > 4:
+		if len(sid[4]) > 5:	
+			print(user.Caption)
+			print(user.Description)
+
+"""
+    
+
+
+
+SELECT * FROM Win32_Account

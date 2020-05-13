@@ -1,0 +1,3 @@
+netdom renamecomputer SRC_NAME /newname:DST_NAME             /force
+
+netdom renamecomputer %COMPUTERNAME% /newname:DST_NAME /force

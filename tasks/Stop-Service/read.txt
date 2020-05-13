@@ -1,0 +1,11 @@
+import wmi
+c = wmi.WMI()
+for service in c.Win32_Service(Name="seclogon"):
+  result, = service.StopService()
+  if result == 0:
+    print "Service", service.Name, "stopped"
+  else:
+    print "Some problem"
+  break
+else:
+  print "Service not found"

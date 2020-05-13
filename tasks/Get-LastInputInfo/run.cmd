@@ -1,0 +1,1 @@
+User32 GetLastInputInfo

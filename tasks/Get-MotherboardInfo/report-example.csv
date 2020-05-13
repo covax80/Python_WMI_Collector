@@ -1,0 +1,30 @@
+IP;Параметр;Значение
+010.000.078.223;Caption;Base Board
+010.000.078.223;ConfigOptions;('To Be Filled By O.E.M.',)
+010.000.078.223;CreationClassName;Win32_BaseBoard
+010.000.078.223;Depth;
+010.000.078.223;Description;Base Board
+010.000.078.223;Height;
+010.000.078.223;HostingBoard;True
+010.000.078.223;HotSwappable;False
+010.000.078.223;InstallDate;
+010.000.078.223;Manufacturer;ECS
+010.000.078.223;Model;
+010.000.078.223;Name;Base Board
+010.000.078.223;OtherIdentifyingInfo;
+010.000.078.223;PartNumber;
+010.000.078.223;PoweredOn;True
+010.000.078.223;Product;H61H2-M6
+010.000.078.223;Removable;False
+010.000.078.223;Replaceable;True
+010.000.078.223;RequirementsDescription;
+010.000.078.223;RequiresDaughterBoard;False
+010.000.078.223;SerialNumber;00000000
+010.000.078.223;SKU;
+010.000.078.223;SlotLayout;
+010.000.078.223;SpecialRequirements;
+010.000.078.223;Status;OK
+010.000.078.223;Tag;Base Board
+010.000.078.223;Version;1.0
+010.000.078.223;Weight;
+010.000.078.223;Width;
