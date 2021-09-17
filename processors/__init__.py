@@ -9,6 +9,7 @@ from .inventer import inventer
 from .freespace import freespace
 from .smb1remove import smb1remove
 from .run_cmd import run_cmd
+from .set_password import set_password
 
 
 

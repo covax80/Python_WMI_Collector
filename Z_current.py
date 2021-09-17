@@ -1,13 +1,16 @@
 #!python3
 # -*- coding: cp1251 -*-
 
+"""
+#----------------------------------------------------------------------
+# Description: Tools set for windows sysadmin via WMI
+# Author:  Artyom Breus <Artyom.Breus@gmail.com>
+# Created at: Fri Apr 2016
+# Computer: VOSTOK-WS777 #
+# Copyright (c) 2016-2021 Artyom Breus  All rights reserved.
 #
-#
-#
-#
-# 
-
-
+#----------------------------------------------------------------------# 
+"""
 
 import win32con
 import wmi
@@ -83,7 +86,7 @@ def process_config():
 			help="Input plugin name for postprocessing from \"processors\" folder (Example:get_C_disk_freespace)", metavar="XRULE", default="plain_text")
 	
 	parser.add_option("-M", "--mode", dest="save_mode", 
-			help="Choice save file format: plain,plain2,plaintable,plaintable2,html,html2,csv,csv2", metavar="SAVEMODE", default='plain')
+			help="Choice save file format: plain,plain2,plaintable,plaintable2,html,html2,csv,csv2\nplain2,plaintable2,html2,csv2 - add host ip in the first column", metavar="SAVEMODE", default='plain')
 
 	parser.add_option("-A", "--wmi-object-properties", dest="wmi_object_properties", 
 			help="get list of the wmi object properties", metavar="PROPRTIES", default=None)
@@ -92,7 +95,7 @@ def process_config():
 			help="Input file name for saving", metavar="FILE", default=None)
 
 	parser.add_option("-G", "--header", dest="result_header", 
-			help="Header for output result", metavar="HEADER", default=None)
+			help="Header for output result\t'*'- Add all wmi properties to header", metavar="HEADER", default=None)
 	                                                                                	
 
 	parser.add_option("-N", "--namespace", dest="namespace", 
@@ -212,8 +215,9 @@ def process_one_host(host):
 	if result:
 		process = importlib.import_module('processors')
 		process = getattr(process,command_line_arg.extract_rule)
-		#print(">>>",dir(process))
+#		print("1>>> ", command_line_arg.wmi_object_properties )
 		result = process(result,command_line_arg,host)
+#		print("2>>> ", command_line_arg.wmi_object_properties )
 	else:
 		try:
 			result = [[socket.gethostbyaddr(host)[0],save_error]]
@@ -262,6 +266,25 @@ def process_hosts():
 			logger.debug("RESPONSE FROM:\t%s\n%s"%(host,pformat(final_result[host])))
 	
 	logger.debug("*final_result - %s "%(final_result))
+
+
+def normalize_result(result):
+	"""Check all rows in table hame same lenght"""
+	max_len = 0
+	idx = 0
+	row_len = {}	
+	for row in result:
+		row_len[idx] = len(row)
+		if max_len <  row_len[idx]:
+			max_len = row_len[idx]
+		idx += 1
+	
+	for r_index, r_len in row_len.items():
+		if r_len < max_len:
+			result[r_index] = result[r_index] + ["-"]*(max_len-r_len)
+	return result
+	
+
 	                               		
                               
 def save_result(result):
@@ -316,22 +339,36 @@ def save():
 	for host in final_result.keys():
 		tmp = []		
 		for row in final_result[host]:
+			row = list(row)
 			if row == None:
 				row = ['Unknown error', '' ]
 			elif type(row) == str:
 				row = ['Unknown error', row]
 			if '2' in command_line_arg.save_mode:				
+				#print(">>>"+ str(row))
 				row.insert(0,zfill_host(host))
 			tmp.append(row)	
-			print(tmp)
+			#print(tmp)
 
 			final_result[host] = tmp
 		result += final_result[host]
         
 	if command_line_arg.result_header:
-		result.insert(0, command_line_arg.result_header )
+		# if need all properies in header
+		if command_line_arg.result_header == ["*"]:
+			if '2' in command_line_arg.save_mode:
+				command_line_arg.wmi_object_properties = "Host," + str(command_line_arg.wmi_object_properties)
+			# If request returns error - wmi_object_properties == NoneType			
+			try:
+				result.insert(0, command_line_arg.wmi_object_properties.split(",") )		
+			except AttributeError:
+				result.insert(0, [" ? "] )
+			
+		else:
+			result.insert(0, command_line_arg.result_header )
 	
 	logger.debug("RESULT:\t%s"%pformat(result))
+	result = normalize_result(result)
 	save_result(result)
              	
 
